@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIC-TAC-TOE</title>
+    <link rel="shortcut icon" href="https://png.pngtree.com/png-vector/20220420/ourmid/pngtree-tic-tac-toe-pattern-png-png-image_4549871.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <!-- Fonts that we use -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Delicious+Handrawn&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header id="header">
+        <h1 align = 'center' id="name">TIC-TAC-TOE</h1>
+    </header>
+
+    <main id="main">
+        <!-- A little explanation of the game and the board (same rules as 3x3 board) -->
+        <h3 id="text" align = 'center'>Tic-tac-toe is a game in which two players by turns put crosses and zeros in compartments of a figure formed by two vertical lines crossing two horizontal lines and each tries to get a row of three crosses or three zeros before the opponent does.
+            <br><br>
+        This game is a little unusual because instead of having a 3x3 gameboard, we have a 4x4 gamebord. But don´t worry, the rules exactly the same !!!!!
+        </h3>
+
+        <!-- LEVEL 1 -->
+        <h2 id="level" align = 'center'>Level 1: Just playing</h2>
+        <h4 id="text" align = 'center'>In this game, the computer is only gonna play in the empty spaces, so probably it´s not gonna win</h4>
+        <div id="level1">
+            <div id="choose">
+                <!-- Creating the symbols the player and the machine are gonna use (player chooses first) -->
+                <div class="player player-active" id="player1Symbol">X</div>
+                <h2 id="option" align = 'center'>Please choose your symbol</h2>
+                <div class="player" id="player2Symbol">O</div>
+            </div>
+
+            <!-- Creating the board for the game using numbers for each cell-->
+            <div id="board">
+                <div class="cell">1</div>
+                <div class="cell">2</div>
+                <div class="cell">3</div>
+                <div class="cell">4</div>
+                <div class="cell">5</div>
+                <div class="cell">6</div>
+                <div class="cell">7</div>
+                <div class="cell">8</div>
+                <div class="cell">9</div>
+                <div class="cell">10</div>
+                <div class="cell">11</div>
+                <div class="cell">12</div>
+                <div class="cell">13</div>
+                <div class="cell">14</div>
+                <div class="cell">15</div>
+                <div class="cell">16</div>
+            </div>
+
+            <!-- Button of restart (restart game) -->
+            <button id="restartGame">Restart</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <img width="90px" height="100px" src="img/unam.png" alt="UNAM LOGO">
+            <div id="footer">
+                <p>Created by Zoe Carmona & Shareny Lechuga</p>
+                <p>&copy; <span id="year"></span> UNAM. All rights reserved.</p>
+            </div>
+            <img width="90px" height="100px" src="img/fi.png" alt="FI LOGO">
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
