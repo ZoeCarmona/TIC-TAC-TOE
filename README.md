@@ -5,4 +5,7 @@ This project was developed for my Artificial Intelligence course. The goal was t
 2. **Medium**: The machine plays with more strategy.
 3. **Hard**: The machine actively seeks to win.
 
-This project utilizes HTML, CSS, and JavaScript.
+This project utilizes:
+- **HTML**
+- **CSS**
+- **JavaScript**
