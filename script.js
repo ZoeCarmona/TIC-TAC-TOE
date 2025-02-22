@@ -2,45 +2,42 @@ const cells = document.querySelectorAll('.cell');
 const option = document.querySelector('#option');
 const xPlayer = document.querySelector('#player1Symbol');
 const oPlayer = document.querySelector('#player2Symbol');
+const level_1 = document.querySelector('#level-1');
+const level_2 = document.querySelector('#level-2');
+const level_3 = document.querySelector('#level-3');
 const restartGame = document.querySelector('#restartGame');
+let def = document.getElementById('level-definition');
 
 // Initializing variables for game
 let player = 'X';
+let level = '1';
 let isPauseGame = false;
 let isGameStart = false;
 
-// Desription for each level
-let lvl = document.querySelectorAll('.dif_level'); // Select all .dif_level elements
-let one = document.getElementById('level-1');
-let two = document.getElementById('level-2');
-let three = document.getElementById('level-3');
-let def = document.getElementById('level-definition');
-
-lvl.forEach(function(div) {
-    div.addEventListener('click', function() {
-        // Reset styles for all divs first
-        lvl.forEach(function(item) {
-        item.style.opacity = '0.5'; // Reset opacity
-        item.style.border = 'solid 4px #17122A';   // Reset border
-        });
-
-        if (div.id === 'level-1') {
-            one.style.opacity = '3';  
-            one.style.border = 'solid 4px #2a2343';
+// Choose level and desription for each level
+function chooseLevel(selectedLevel){
+    if(!isGameStart){
+        level = selectedLevel;
+        if(level == '1'){
+            level_1.classList.add('level-active');
+            level_2.classList.remove('level-active');
+            level_3.classList.remove('level-active');
             def.innerText = 'On this level, the machine follows the Tic-Tac-Toe rules and makes a random move on the board, so you’re always gonna win!!!';
-        } else if (div.id === 'level-2') {
-            two.style.opacity = '3';  
-            two.style.border = 'solid 4px #2a2343';
+        } else if (level == '2'){
+            level_1.classList.remove('level-active');
+            level_2.classList.add('level-active');
+            level_3.classList.remove('level-active');
             def.innerText = 'On this level, the machine tries to prevent the opponent from winning and/or seeks to win, so be careful!!';
-        } else if (div.id === 'level-3') {
-            three.style.opacity = '3';  // Change opacity for level-3
-            three.style.border = 'solid 4px #2a2343';
+        } else {
+            level_1.classList.remove('level-active');
+            level_2.classList.remove('level-active');
+            level_3.classList.add('level-active');
             def.innerText = 'On this level, the machine attempts to make moves in positions that allow it to get closer to winning, think wisely!!';
         }
-    });
-});
+    }
+}
 
-// Array for winning options (all teh locations)
+// Array for winning options (all the locations)
 const board = [
     '', '', '', '', 
     '', '', '', '', 
@@ -70,12 +67,17 @@ function tapCell(cell, index){
     if ((cell.textContent == '') & (!isPauseGame)){
         isGameStart = true;
         updateCell(cell, index);
-        // Random pick
+        // Levels
         if(!checkWinner()){
             changePlayer()
+
+            if(level == '1'){
+                levelOneGame();
+            }
         }
     }
 };
+
 
 function updateCell(cell, index){
     cell.textContent = player; 
@@ -87,6 +89,35 @@ function updateCell(cell, index){
 function changePlayer(){
     player = (player == 'X') ? 'O' : 'X'
     //console.log(player) #option
+}
+
+//Level one game (random)
+function levelOneGame(){
+    //Machine choosing
+    isPauseGame = true;
+
+    setTimeout(() => {
+        let randomIndex
+        do {
+            //Picking a random index
+            randomIndex = Math.floor(Math.random() * board.length);
+        } while(
+            //Choosing empy
+            board[randomIndex] != ''
+        )
+        //Playing that cell (machine)
+        updateCell(cells[randomIndex], randomIndex, player);
+
+        // Change to player
+        if(!checkWinner()){
+            changePlayer();
+            isPauseGame = false;
+            return;
+        }
+
+        //Reset of the player
+        player = (player == 'X') ? 'O' : 'X';
+    }, 1000) //Delay machine move by 1s
 }
 
 function checkWinner(){
@@ -121,6 +152,19 @@ function winner(winIndex){
     restartGame.style.visibility = 'visible';
 }
 
+function choosePlayer(selectedPlayer){
+    if (!isGameStart){
+        player = selectedPlayer;
+        if(player == 'X'){
+            xPlayer.classList.add('player-active');
+            oPlayer.classList.remove('player-active');
+        } else{
+            xPlayer.classList.remove('player-active');
+            oPlayer.classList.add('player-active');
+        }
+    }
+}
+
 // Hide again the restart button
 restartGame.addEventListener('click', () => {
     restartGame.style.visibility = 'hidden';
@@ -136,3 +180,4 @@ restartGame.addEventListener('click', () => {
     // option.textContent = `Please choose your symbol`
     document.getElementById("option").innerText = "Please choose your symbol"
 })
+
