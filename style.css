@@ -54,16 +54,48 @@ h3 {
     font-family: 'Darumadrop One', serif;
 }
 
-#level1 {
+#level-board {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.dif_level {
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 12px;
+    width: 200px;
+    height: 60px;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+    opacity: 0.5;
+    color: #C8ACD6; 
+    background-color: #17122A;
+    border: solid 4px #17122A;
+    transition: 0.3 s;
+}
+
+.dif_level:hover {
+    border: solid 4px #2a2343;
+} 
+
+#level-definition {
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    margin: 10px 10px 0px 10px;
+}
+
 #choose {
     display: flex;
     justify-content: space-between;
-    margin: 20px;
+    margin: 10px;
     width: 50%;
     align-items: center;
 }
@@ -103,8 +135,8 @@ h3 {
 
 #board {
     display: grid;
-    grid-template-columns: repeat(4, 130px);
-    grid-template-rows: repeat(4, 130px);
+    grid-template-columns: repeat(4, 120px);
+    grid-template-rows: repeat(4, 120px);
     gap: 12px;
 }
 
@@ -127,7 +159,7 @@ h3 {
 }
 
 #restartGame {
-    margin: 50px;
+    margin: 20px;
     width: 300px;
     height: 50px;
     border-radius: 12px;
@@ -219,6 +251,10 @@ footer p {
     #text{
         margin: 10px 10px 10px 10px;
         font-size: 20px;
+    }
+
+    #level-definition {
+        font-size: 15px;
     }
 }
 
