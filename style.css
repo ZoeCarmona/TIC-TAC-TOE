@@ -46,6 +46,15 @@ h3 {
     margin-top: 20px;
 }
 
+#title {
+    background-color: rgba(200, 172, 214, 0.1); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+    border-radius: 100px;
+}
+
 #level {
     font-size: 300%;
 }
@@ -60,7 +69,7 @@ h3 {
     align-items: center;
 }
 
-.container {
+#container {
     display: flex;
     justify-content: space-evenly;
 }
@@ -81,7 +90,12 @@ h3 {
     transition: 0.3 s;
 }
 
-.dif_level:hover {
+#container .level-active {
+    opacity: 3;
+    border: solid 4px #2a2343;
+}
+
+#container .dif_level:hover {
     border: solid 4px #2a2343;
 } 
 
