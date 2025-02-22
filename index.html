@@ -22,12 +22,19 @@
         This game is a little unusual because instead of having a 3x3 gameboard, we have a 4x4 gamebord. But don´t worry, the rules exactly the same !!!!!
         </p>
 
-        <!-- LEVEL 1 -->
-        <h2 id="level" align = 'center'>Level 1: Just playing</h2>
-        <p id="text" align = 'center'>In this game, the computer is only gonna play in the empty spaces, so probably it´s not gonna win</p>
-        <div id="level1">
+        <!-- LEVELS -->
+        <div class="container">
+            <div class="dif_level" id="level-1">LEVEL 1</div>
+            <div class="dif_level" id="level-2">LEVEL 2</div>
+            <div class="dif_level" id="level-3">LEVEL 3</div>
+        </div>
+        
+        <p id="level-definition" align = 'center'></p>
+
+        <!-- Player can choose the level of the game -->
+        <div id="level-board">
+            <!-- Creating the symbols the player and the machine are gonna use (player chooses first) -->
             <div id="choose">
-                <!-- Creating the symbols the player and the machine are gonna use (player chooses first) -->
                 <div class="player player-active" id="player1Symbol">X</div>
                 <h2 id="option" align = 'center'>Please choose your symbol</h2>
                 <div class="player" id="player2Symbol">O</div>
