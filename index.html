@@ -22,22 +22,23 @@
         This game is a little unusual because instead of having a 3x3 gameboard, we have a 4x4 gamebord. But don´t worry, the rules exactly the same !!!!!
         </p>
 
-        <!-- LEVELS -->
-        <div class="container">
-            <div class="dif_level" id="level-1">LEVEL 1</div>
-            <div class="dif_level" id="level-2">LEVEL 2</div>
-            <div class="dif_level" id="level-3">LEVEL 3</div>
+        <!-- Player can choose the level of the game -->
+        <h2 id="title" a> Choose level </h2>
+        <p id="text" align = 'center'> Please click on each level to know more about it and decide which one to play</p>
+        <div id="container">
+            <div class="dif_level" id="level-1" onclick="chooseLevel('1')">LEVEL 1</div>
+            <div class="dif_level" id="level-2" onclick="chooseLevel('2')">LEVEL 2</div>
+            <div class="dif_level" id="level-3" onclick="chooseLevel('3')">LEVEL 3</div>
         </div>
         
         <p id="level-definition" align = 'center'></p>
 
-        <!-- Player can choose the level of the game -->
         <div id="level-board">
             <!-- Creating the symbols the player and the machine are gonna use (player chooses first) -->
             <div id="choose">
-                <div class="player player-active" id="player1Symbol">X</div>
+                <div class="player player-active" id="player1Symbol" onclick="choosePlayer('X')">X</div>
                 <h2 id="option" align = 'center'>Please choose your symbol</h2>
-                <div class="player" id="player2Symbol">O</div>
+                <div class="player" id="player2Symbol" onclick="choosePlayer('O')">O</div>
             </div>
 
             <!-- Creating the board for the game using numbers for each cell-->
@@ -69,7 +70,6 @@
         <div class="footer-content">
             <img width="90px" height="100px" src="img/unam.png" alt="UNAM LOGO">
             <div id="footer">
-                <p>Created by Zoe Carmona & Shareny Lechuga</p>
                 <p>&copy; <span id="year"></span> UNAM. All rights reserved.</p>
             </div>
             <img width="90px" height="100px" src="img/fi.png" alt="FI LOGO">
