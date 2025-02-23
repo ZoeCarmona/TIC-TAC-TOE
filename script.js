@@ -74,7 +74,7 @@ function tapCell(cell, index){
             if(level == '1'){
                 levelOneGame();
             } else if (level == '2'){
-                console.log('cooking....');
+                levelTwo();
             } else {
                 levelThreeGame();
             }
@@ -156,8 +156,8 @@ restartGame.addEventListener('click', () => {
     document.getElementById("option").innerText = "Please choose your symbol"
 })
 
-// ------------------- LEVELS -----------------------
-//Level one game (random)
+// ------------------- LEVELS ------------------------------------------------------------------
+//--------------------Level one game (random)
 function levelOneGame(){
     //Machine choosing
     isPauseGame = true;
@@ -186,6 +186,88 @@ function levelOneGame(){
     }, 1000) //Delay machine move by 1s
 }
 
+//------------------------------LEVEL TWO-----------
+function levelTwo() {
+    //Machine choosing
+    isPauseGame = true;
+
+    setTimeout(() => {
+        let randomIndex
+        // For storing the players movement
+        const xIndex = [];
+        const oIndex = [];
+        // Attempt to block or make a move based on win conditions
+        let moveMade = false;
+
+        // Loop through the board and record the positions of 'X' and 'O'
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === 'X') {
+                xIndex.push(i);  
+            } else if (board[i] === 'O') {
+                oIndex.push(i);  
+            }
+        }
+
+        // Check for winCondition and place mark accordingly
+        for (const combination of winCondition) {
+            // Check if there are two X or O marks in the combination
+            const xInCombination = combination.filter(index => xIndex.includes(index));
+            const oInCombination = combination.filter(index => oIndex.includes(index));
+
+            // If two X marks are found, block by placing an O in the available spot
+            if (xInCombination.length === 2) {
+                const emptySpot = combination.find(index => !xIndex.includes(index) && !oIndex.includes(index));
+                if (emptySpot !== undefined && board[emptySpot] === '') {
+                    // Place the mark in the empty spot
+                    updateCell(cells[emptySpot], emptySpot, 'O');
+                    moveMade = true;
+                    break;  // Exit loop once the move is made
+                }
+            }
+
+            // If two O marks are found, block by placing an X in the available spot
+            if (oInCombination.length === 2) {
+                const emptySpot = combination.find(index => !xIndex.includes(index) && !oIndex.includes(index));
+                if (emptySpot !== undefined && board[emptySpot] === '') {
+                    // Place the mark in the empty spot
+                    updateCell(cells[emptySpot], emptySpot, 'X');
+                    moveMade = true;
+                    break;  // Exit loop once the move is made
+                }
+            }
+        }
+
+        // If no move was made (no block), make a random move
+        if (!moveMade) {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * board.length);
+            } while (board[randomIndex] !== '');  // It’s not empty
+            updateCell(cells[randomIndex], randomIndex, player);
+        }
+
+        // Change to player
+        if (!checkWinner()) {
+            changePlayer();
+            isPauseGame = false;
+            return;
+        }
+
+        //Playing that cell (machine)
+        updateCell(cells[randomIndex], randomIndex, player);
+
+        // Change to player
+        if(!checkWinner()){
+            changePlayer();
+            isPauseGame = false;
+            return;
+        }
+
+        //Reset of the player
+        player = (player == 'X') ? 'O' : 'X';
+    }, 1000) //Delay machine move by 1s
+}
+
 //----------------Level Three ()
 function levelThreeGame() {
     // Machine choosing
@@ -196,8 +278,6 @@ function levelThreeGame() {
     // Creating an array of the borders of the board
     const aroundBoard = [1, 2, 3, 4, 5, 8, 9, 12, 13, 14, 15, 16];
     let randomIndex;
-
-    
 
     setTimeout(() => {
         if (board[5] === '' && board[6] === '' && board[9] === '' && board[10] === '') {
