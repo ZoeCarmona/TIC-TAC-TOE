@@ -223,11 +223,9 @@ function levelThreeGame(){
         //First move on the center
         function center(){
             randomIndex = centerBoard[Math.floor(Math.random() * centerBoard.length)];
-            if(board[randomIndex] == '') next();
             // Check if the selected cell is empty
             if(board[randomIndex] === '') {
                 next(); // If the spot is empty, make the move
-
             } else {
                 center(); // If not, try again by calling around() recursively
             }
