@@ -73,11 +73,14 @@ function tapCell(cell, index){
 
             if(level == '1'){
                 levelOneGame();
+            } else if (level == '2'){
+                console.log('cooking....');
+            } else {
+                levelThreeGame();
             }
         }
     }
 };
-
 
 function updateCell(cell, index){
     cell.textContent = player; 
@@ -89,35 +92,6 @@ function updateCell(cell, index){
 function changePlayer(){
     player = (player == 'X') ? 'O' : 'X'
     //console.log(player) #option
-}
-
-//Level one game (random)
-function levelOneGame(){
-    //Machine choosing
-    isPauseGame = true;
-
-    setTimeout(() => {
-        let randomIndex
-        do {
-            //Picking a random index
-            randomIndex = Math.floor(Math.random() * board.length);
-        } while(
-            //Choosing empy
-            board[randomIndex] != ''
-        )
-        //Playing that cell (machine)
-        updateCell(cells[randomIndex], randomIndex, player);
-
-        // Change to player
-        if(!checkWinner()){
-            changePlayer();
-            isPauseGame = false;
-            return;
-        }
-
-        //Reset of the player
-        player = (player == 'X') ? 'O' : 'X';
-    }, 1000) //Delay machine move by 1s
 }
 
 function checkWinner(){
@@ -181,3 +155,94 @@ restartGame.addEventListener('click', () => {
     document.getElementById("option").innerText = "Please choose your symbol"
 })
 
+// ------------------- LEVELS -----------------------
+//Level one game (random)
+function levelOneGame(){
+    //Machine choosing
+    isPauseGame = true;
+
+    setTimeout(() => {
+        //Machine choosing
+        isPauseGame = true;
+
+        let randomIndex
+        do {
+            //Picking a random index
+            randomIndex = Math.floor(Math.random() * board.length);
+        } while( board[randomIndex] != '' ) //It´s not empty
+        //Playing that cell (machine)
+        updateCell(cells[randomIndex], randomIndex, player);
+
+        // Change to player
+        if(!checkWinner()){
+            changePlayer();
+            isPauseGame = false;
+            return;
+        }
+
+        //Reset of the player
+        player = (player == 'X') ? 'O' : 'X';
+    }, 1000) //Delay machine move by 1s
+}
+
+//Level Three ()
+function levelThreeGame(){
+    //Machine choosing
+    isPauseGame = true;
+
+    //Creating and array of the center of the board
+    const centerBoard = [5, 6, 9, 10];
+    //cReating and array of the borders of the board
+    const aroundBoard = [1,2,3,4,5,8,9,12,13,14,15,16];
+    let randomIndex;
+
+    function next(){
+        //Playing that cell (machine)
+        updateCell(cells[randomIndex], randomIndex, player);
+    
+        // Change to player
+        if(!checkWinner()){
+            changePlayer();
+            isPauseGame = false;
+            return;
+        }
+    
+        //Reset of the player
+        player = (player == 'X') ? 'O' : 'X';
+    }
+
+    setTimeout(() =>{
+        if(board[5] !== '' || board[6] !== '' || board[9] !== '' || board[10] !== ''){
+            around();
+            return;
+        } else{
+            center();
+            return;
+        }
+
+        //First move on the center
+        function center(){
+            randomIndex = centerBoard[Math.floor(Math.random() * centerBoard.length)];
+            if(board[randomIndex] == '') next();
+            // Check if the selected cell is empty
+            if(board[randomIndex] === '') {
+                next(); // If the spot is empty, make the move
+
+            } else {
+                center(); // If not, try again by calling around() recursively
+            }
+        }
+
+        // Move on the corners
+        function around(){
+            randomIndex = aroundBoard[Math.floor(Math.random() * aroundBoard.length)];
+            // Check if the selected cell is empty
+            if(board[randomIndex] === '') {
+                next(); // If the spot is empty, make the move
+            } else {
+                around(); // If not, try again by calling around() recursively
+            }
+        }
+    }, 1000) //Delay machine move by 1s)
+    
+}
