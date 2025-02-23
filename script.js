@@ -253,16 +253,6 @@ function levelTwo() {
             return;
         }
 
-        //Playing that cell (machine)
-        updateCell(cells[randomIndex], randomIndex, player);
-
-        // Change to player
-        if(!checkWinner()){
-            changePlayer();
-            isPauseGame = false;
-            return;
-        }
-
         //Reset of the player
         player = (player == 'X') ? 'O' : 'X';
     }, 1000) //Delay machine move by 1s
