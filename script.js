@@ -91,6 +91,7 @@ function updateCell(cell, index){
 
 function changePlayer(){
     player = (player == 'X') ? 'O' : 'X'
+    option.textContent = `Player `+player+' turn';
     //console.log(player) #option
 }
 
@@ -185,62 +186,119 @@ function levelOneGame(){
     }, 1000) //Delay machine move by 1s
 }
 
-//Level Three ()
-function levelThreeGame(){
-    //Machine choosing
+//----------------Level Three ()
+function levelThreeGame() {
+    // Machine choosing
     isPauseGame = true;
 
-    //Creating and array of the center of the board
+    // Creating an array of the center of the board
     const centerBoard = [5, 6, 9, 10];
-    //cReating and array of the borders of the board
-    const aroundBoard = [1,2,3,4,5,8,9,12,13,14,15,16];
+    // Creating an array of the borders of the board
+    const aroundBoard = [1, 2, 3, 4, 5, 8, 9, 12, 13, 14, 15, 16];
     let randomIndex;
 
-    function next(){
-        //Playing that cell (machine)
-        updateCell(cells[randomIndex], randomIndex, player);
     
-        // Change to player
-        if(!checkWinner()){
-            changePlayer();
-            isPauseGame = false;
-            return;
-        }
-    
-        //Reset of the player
-        player = (player == 'X') ? 'O' : 'X';
-    }
 
-    setTimeout(() =>{
-        if(board[5] !== '' || board[6] !== '' || board[9] !== '' || board[10] !== ''){
-            around();
-            return;
-        } else{
+    setTimeout(() => {
+        if (board[5] === '' && board[6] === '' && board[9] === '' && board[10] === '') {
             center();
-            return;
+        } else {
+            around();
         }
 
-        //First move on the center
-        function center(){
+        // First move on the center
+        function center() {
             randomIndex = centerBoard[Math.floor(Math.random() * centerBoard.length)];
-            // Check if the selected cell is empty
-            if(board[randomIndex] === '') {
-                next(); // If the spot is empty, make the move
+            if (board[randomIndex] === '') {
+                // Playing that cell (machine)
+                updateCell(cells[randomIndex], randomIndex, player); // Use machine's symbol
+            
+                // Change to player
+                if (!checkWinner()) {
+                    changePlayer();
+                    isPauseGame = false;
+                    return;
+                }
+            
+                // Reset the player (for the next turn)
+                player = (player === 'X') ? 'O' : 'X';
+                
+                nextMove(randomIndex);
             } else {
-                center(); // If not, try again by calling around() recursively
+                center(); // If not, try again by calling center() recursively
             }
+
         }
 
         // Move on the corners
-        function around(){
+        function around() {
             randomIndex = aroundBoard[Math.floor(Math.random() * aroundBoard.length)];
             // Check if the selected cell is empty
-            if(board[randomIndex] === '') {
-                next(); // If the spot is empty, make the move
+            if (board[randomIndex] === '') {
+                // Playing that cell (machine)
+                updateCell(cells[randomIndex], randomIndex, player); // Use machine's symbol
+            
+                // Change to player
+                if (!checkWinner()) {
+                    changePlayer();
+                    isPauseGame = false;
+                    return;
+                }
+            
+                // Reset the player (for the next turn)
+                player = (player === 'X') ? 'O' : 'X';
+                
+                nextMove(randomIndex);
             } else {
                 around(); // If not, try again by calling around() recursively
             }
         }
-    }, 1000) //Delay machine move by 1s)
-    
+
+        // Function to handle the next move based on winCondition
+        function nextMove(indexMark) {
+            // Find all conditions that contain the indexMark
+            let validConditions = winCondition.filter(condition => condition.includes(indexMark));
+        
+            if (validConditions.length > 0) {
+                // Pick a random condition from the valid ones
+                let randomCondition = validConditions[Math.floor(Math.random() * validConditions.length)];
+        
+                // Get the next index in the selected condition
+                let nextIndex = getNextIndexInCondition(randomCondition, indexMark);
+        
+                // Check if the next index is empty and place the mark
+                if (board[nextIndex] === '') {
+                    randomIndex = nextIndex;  // Update randomIndex for the next move
+                    // Playing that cell (machine)
+                    updateCell(cells[randomIndex], randomIndex, player); // Use machine's symbol
+                
+                    // Change to player
+                    if (!checkWinner()) {
+                        changePlayer();
+                        isPauseGame = false;
+                        return;
+                    }
+                
+                    // Reset the player (for the next turn)
+                    player = (player === 'X') ? 'O' : 'X';
+                
+                
+                }
+            }
+        }
+        
+        // Function to calculate the next index in the winning condition
+        function getNextIndexInCondition(condition, currentIndex) {
+            // Find the index of currentIndex in the condition array
+            let currentPos = condition.indexOf(currentIndex);
+        
+            // Get the next position, wrapping around if it's the last element
+            let nextPos = (currentPos + 1) % condition.length; // Wrap around to the start if it's the last
+        
+            // Return the next index in the condition
+            return condition[nextPos];
+        }
+
+    }, 1000); // Delay machine move by 1 second
 }
+
