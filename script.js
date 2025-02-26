@@ -47,13 +47,11 @@ const board = [
 
 const winCondition = [
     // Rows
-    [0,1,2], [1,2,3], [4,5,6], [5,6,7], [8,9,10], [9,10,11], [12,13,14], [13,14,15],
+    [0,1,2,3], [4,5,6,7], [8,9,10,11], [12,13,14,15],
     // Columns
-    [0,4,8], [4,8,12], [1,5,9], [5,9,13], [2,6,10], [6,10,14], [3,7,11], [7,11,15], 
+    [0,4,8,12], [1,5,9,13], [2,6,10,14], [3,7,11,15],  
     //Diagonal 1 (top left to bottom right)
-    [4,9,14], [0,5,10,15], [5,10,15], [1,6,11], 
-    // Diagonal 2 (top right to bottom left)
-    [2,5,8], [3,6,9], [6,9,12], [7,10,13]
+    [0,5,10,15], [3,6,9,12]
 ];
 
 // Click 
@@ -74,7 +72,7 @@ function tapCell(cell, index){
             if(level == '1'){
                 levelOneGame();
             } else if (level == '2'){
-                levelTwo();
+                levelTwoGame();
             } else {
                 levelThreeGame();
             }
@@ -85,7 +83,7 @@ function tapCell(cell, index){
 function updateCell(cell, index){
     cell.textContent = player; 
     board[index] = player;
-    // console.log(board);
+    // console.log(index);
     cell.style.color = (player == 'X') ? '#7fc7af' : '#cf69e6'
 }
 
@@ -96,10 +94,10 @@ function changePlayer(){
 }
 
 function checkWinner(){
-    for(const [a,b,c] of winCondition){
+    for(const [a,b,c,d] of winCondition){
         // Check each condition
-        if ((board[a] == player) && (board[b] == player) && (board[c] == player)){
-            winner([a,b,c]);
+        if ((board[a] == player) && (board[b] == player) && (board[c] == player) && (board[d] == player)){
+            winner([a,b,c,d]);
             return true;
         } 
     }
@@ -118,6 +116,7 @@ function declareDraw(){
 }
 
 function winner(winIndex){
+
     option.textContent = ` Player ${player} wins`  
     isPauseGame = true
 
@@ -170,6 +169,7 @@ function levelOneGame(){
         do {
             //Picking a random index
             randomIndex = Math.floor(Math.random() * board.length);
+            console.log("The AI ("+player+") is playing in: "+randomIndex)
         } while( board[randomIndex] != '' ) //It´s not empty
         //Playing that cell (machine)
         updateCell(cells[randomIndex], randomIndex, player);
@@ -182,31 +182,33 @@ function levelOneGame(){
         }
 
         //Reset of the player
-        player = (player == 'X') ? 'O' : 'X';
+        // player = (player == 'X') ? 'O' : 'X';
     }, 1000) //Delay machine move by 1s
 }
 
 //------------------------------LEVEL TWO-----------
-function levelTwo() {
+function levelTwoGame() {
     //Machine choosing
     isPauseGame = true;
+    console.log('Agent playing with '+player)
 
     setTimeout(() => {
-        let randomIndex
         // For storing the players movement
         const xIndex = [];
         const oIndex = [];
         // Attempt to block or make a move based on win conditions
         let moveMade = false;
-
         // Loop through the board and record the positions of 'X' and 'O'
         for (let i = 0; i < board.length; i++) {
             if (board[i] === 'X') {
                 xIndex.push(i);  
             } else if (board[i] === 'O') {
-                oIndex.push(i);  
+                oIndex.push(i); 
             }
         }
+
+        console.log("Index of O elements: "+ oIndex)
+        console.log("Index of X elements: "+ xIndex)
 
         // Check for winCondition and place mark accordingly
         for (const combination of winCondition) {
@@ -214,9 +216,10 @@ function levelTwo() {
             const xInCombination = combination.filter(index => xIndex.includes(index));
             const oInCombination = combination.filter(index => oIndex.includes(index));
 
-            // If two X marks are found, block by placing an O in the available spot
-            if (xInCombination.length === 2) {
+            // If three X marks are found, block by placing an O in the available spot
+            if (xInCombination.length === 3) {
                 const emptySpot = combination.find(index => !xIndex.includes(index) && !oIndex.includes(index));
+                console.log("Player "+player+" is going to block in "+emptySpot)
                 if (emptySpot !== undefined && board[emptySpot] === '') {
                     // Place the mark in the empty spot
                     updateCell(cells[emptySpot], emptySpot, 'O');
@@ -225,9 +228,10 @@ function levelTwo() {
                 }
             }
 
-            // If two O marks are found, block by placing an X in the available spot
-            if (oInCombination.length === 2) {
+            // If three O marks are found, block by placing an X in the available spot
+            if (oInCombination.length === 3) {
                 const emptySpot = combination.find(index => !xIndex.includes(index) && !oIndex.includes(index));
+                console.log("Player "+player+" is going to block in "+emptySpot)
                 if (emptySpot !== undefined && board[emptySpot] === '') {
                     // Place the mark in the empty spot
                     updateCell(cells[emptySpot], emptySpot, 'X');
@@ -254,121 +258,92 @@ function levelTwo() {
         }
 
         //Reset of the player
-        player = (player == 'X') ? 'O' : 'X';
+        // player = (player == 'X') ? 'O' : 'X';
     }, 1000) //Delay machine move by 1s
 }
 
-//----------------Level Three ()
+//----------------------------- LEVEL THREE
 function levelThreeGame() {
     // Machine choosing
     isPauseGame = true;
 
-    // Creating an array of the center of the board
-    const centerBoard = [5, 6, 9, 10];
-    // Creating an array of the borders of the board
-    const aroundBoard = [1, 2, 3, 4, 5, 8, 9, 12, 13, 14, 15, 16];
-    let randomIndex;
-
     setTimeout(() => {
-        if (board[5] === '' && board[6] === '' && board[9] === '' && board[10] === '') {
-            center();
-        } else {
-            around();
-        }
-
-        // First move on the center
-        function center() {
-            randomIndex = centerBoard[Math.floor(Math.random() * centerBoard.length)];
-            if (board[randomIndex] === '') {
-                // Playing that cell (machine)
-                updateCell(cells[randomIndex], randomIndex, player); // Use machine's symbol
-            
-                // Change to player
-                if (!checkWinner()) {
-                    changePlayer();
-                    isPauseGame = false;
-                    return;
-                }
-            
-                // Reset the player (for the next turn)
-                player = (player === 'X') ? 'O' : 'X';
-                
-                nextMove(randomIndex);
-            } else {
-                center(); // If not, try again by calling center() recursively
+        // Minimax algorithm to find the best move
+        function minimax(board, depth, isMaximizing) {
+            // Limit the depth to 3 to avoid deep recursion
+            if (depth > 5) {
+                return 0; // Return neutral score if depth exceeds the limit
             }
 
-        }
-
-        // Move on the corners
-        function around() {
-            randomIndex = aroundBoard[Math.floor(Math.random() * aroundBoard.length)];
-            // Check if the selected cell is empty
-            if (board[randomIndex] === '') {
-                // Playing that cell (machine)
-                updateCell(cells[randomIndex], randomIndex, player); // Use machine's symbol
-            
-                // Change to player
-                if (!checkWinner()) {
-                    changePlayer();
-                    isPauseGame = false;
-                    return;
+            // Check if the game is over
+            const winner = checkWinner();
+            if (winner !== null) {
+                if (winner === 'O') {
+                    return 10 - depth; // Computer wins
+                } else if (winner === 'X') {
+                    return depth - 10; // Player wins
+                } else {
+                    return 0; // Draw
                 }
-            
-                // Reset the player (for the next turn)
-                player = (player === 'X') ? 'O' : 'X';
-                
-                nextMove(randomIndex);
-            } else {
-                around(); // If not, try again by calling around() recursively
             }
-        }
 
-        // Function to handle the next move based on winCondition
-        function nextMove(indexMark) {
-            // Find all conditions that contain the indexMark
-            let validConditions = winCondition.filter(condition => condition.includes(indexMark));
-        
-            if (validConditions.length > 0) {
-                // Pick a random condition from the valid ones
-                let randomCondition = validConditions[Math.floor(Math.random() * validConditions.length)];
-        
-                // Get the next index in the selected condition
-                let nextIndex = getNextIndexInCondition(randomCondition, indexMark);
-        
-                // Check if the next index is empty and place the mark
-                if (board[nextIndex] === '') {
-                    randomIndex = nextIndex;  // Update randomIndex for the next move
-                    // Playing that cell (machine)
-                    updateCell(cells[randomIndex], randomIndex, player); // Use machine's symbol
-                
-                    // Change to player
-                    if (!checkWinner()) {
-                        changePlayer();
-                        isPauseGame = false;
-                        return;
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = 'O'; // Computer's move
+                        let score = minimax(board, depth + 1, false);
+                        board[i] = ''; // Undo move
+                        bestScore = Math.max(score, bestScore);
                     }
-                
-                    // Reset the player (for the next turn)
-                    player = (player === 'X') ? 'O' : 'X';
-                
-                
                 }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = 'X'; // Player's move
+                        let score = minimax(board, depth + 1, true);
+                        board[i] = ''; // Undo move
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+                return bestScore;
             }
         }
-        
-        // Function to calculate the next index in the winning condition
-        function getNextIndexInCondition(condition, currentIndex) {
-            // Find the index of currentIndex in the condition array
-            let currentPos = condition.indexOf(currentIndex);
-        
-            // Get the next position, wrapping around if it's the last element
-            let nextPos = (currentPos + 1) % condition.length; // Wrap around to the start if it's the last
-        
-            // Return the next index in the condition
-            return condition[nextPos];
+
+        // Function to find the best move for the computer
+        function findBestMove() {
+            let bestScore = -Infinity;
+            let bestMove = null;
+
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = 'O'; // Try computer's move
+                    let score = minimax(board, 0, false);
+                    board[i] = ''; // Undo move
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = i;
+                    }
+                }
+            }
+
+            return bestMove;
         }
 
+        // Find the best move for the computer
+        const bestMove = findBestMove();
+
+        if (bestMove !== null) {
+            // Make the computer's move
+            updateCell(cells[bestMove], bestMove);
+            if (!checkWinner()) {
+                changePlayer(); // Switch back to the player
+            }
+        }
+
+        isPauseGame = false; // Unpause the game
     }, 1000); // Delay machine move by 1 second
 }
 
